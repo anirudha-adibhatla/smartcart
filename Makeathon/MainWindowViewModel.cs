@@ -119,7 +119,7 @@ namespace Makeathon
             msg.Message = _message;
             msg.LogMessageType = _logMessageType;
             msg.LogTime = DateTime.Now.ToString() + " | ";
-            Logs.Add(msg);
+            uiContext.Send(x =>Logs.Add(msg), null);
         }
 
         #endregion
@@ -173,32 +173,36 @@ namespace Makeathon
         {
             await Task.Run(()=> {
                 System.Timers.Timer myTimer = new System.Timers.Timer();
-                // Tell the timer what to do when it elapses
                 myTimer.Elapsed += new ElapsedEventHandler(GetItemsPollEvent);
-                // Set it to go off every five seconds
-                myTimer.Interval = 500;
-                // And start it        
+                myTimer.Interval = 500;   
                 myTimer.Enabled = true;
             });
         }
 
         private void GetItemsPollEvent(object src, ElapsedEventArgs e)
         {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://localhost:3000");
-            httpWebRequest.Method = WebRequestMethods.Http.Get;
-            httpWebRequest.Accept = "application/json";
-            var response = (HttpWebResponse)httpWebRequest.GetResponse();
-
-            using (var sr = new StreamReader(response.GetResponseStream()))
+            try
             {
-                List<SmartCartItem> items = JsonConvert.DeserializeObject<List<SmartCartItem>>(sr.ReadToEnd());
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://localhost:3000");
+                httpWebRequest.Method = WebRequestMethods.Http.Get;
+                httpWebRequest.Accept = "application/json";
+                var response = (HttpWebResponse)httpWebRequest.GetResponse();
 
-                items = items.Except(SmartCartItems.ToList()).ToList();
-                foreach (var item in items)
+                using (var sr = new StreamReader(response.GetResponseStream()))
                 {
-                    MainUserControlViewModel.AddSmartCartItem(item);
+                    List<SmartCartItem> items = JsonConvert.DeserializeObject<List<SmartCartItem>>(sr.ReadToEnd());
+
+                    items = items.Except(SmartCartItems.ToList()).ToList();
+                    foreach (var item in items)
+                    {
+                        MainUserControlViewModel.AddSmartCartItem(item);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                AddLog(ex.Message, LogMessageType.ERROR);
+            }            
         }
 
         ~MainUserControlViewModel()

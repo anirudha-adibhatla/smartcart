@@ -8,7 +8,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"       
         xmlns:local="clr-namespace:Makeathon"        
         mc:Ignorable="d"
-        Title="EPDRD" 
+        Title="Makeathon" 
         Height="900" Width="1440"
         GlowBrush="Black" Foreground="{DynamicResource InfoForegroundBrush}" 
         WindowTitleBrush="{DynamicResource MainBackgroundBrush}" 
