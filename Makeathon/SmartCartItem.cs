@@ -8,8 +8,10 @@ namespace Makeathon
 {
     public class SmartCartItem: IEquatable<SmartCartItem>
     {
+        public string ID { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
+        public int Count { get; set; }
         public string Location { get; set; }
         public string ExpiryDate { get; set; }
 
@@ -17,11 +19,7 @@ namespace Makeathon
         {
             if (other == null)
                 return false;
-            else if (
-                    string.Equals(this.Name, other.Name) &&
-                    string.Equals(this.Location, other.Location) &&
-                    string.Equals(this.ExpiryDate, other.ExpiryDate) &&
-                    this.Price == other.Price)
+            else if (string.Equals(this.ID, other.ID))
                 return true;
             else
                 return false;
@@ -29,7 +27,7 @@ namespace Makeathon
 
         public override int GetHashCode()
         {
-            return this.Name.GetHashCode() ^ this.Location.GetHashCode() ^ this.ExpiryDate.GetHashCode() ^ this.Price.GetHashCode();
+            return this.ID.GetHashCode();
         }
     }
 }

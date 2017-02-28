@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="Makeathon" 
         Height="900" Width="1440"
-        GlowBrush="Black" Foreground="{DynamicResource InfoForegroundBrush}" 
+        GlowBrush="Black" Foreground="{DynamicResource InfoForegroundBrush}"
         WindowTitleBrush="{DynamicResource MainBackgroundBrush}" 
         TitleForeground="{DynamicResource InfoForegroundBrush}" 
         OverrideDefaultWindowCommandsBrush="{DynamicResource InfoForegroundBrush}">

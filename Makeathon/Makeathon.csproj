@@ -74,6 +74,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\SubTotalConverter.cs" />
     <Compile Include="Messaging\LiveLogs\LiveLogMessageTypeToBrushConverter.cs" />
     <Compile Include="Messaging\LiveLogs\LiveLogMessageTypeToFontWeightConverter.cs" />
     <Compile Include="Messaging\LiveLogs\LiveLogsUC.xaml.cs">

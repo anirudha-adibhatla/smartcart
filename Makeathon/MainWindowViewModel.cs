@@ -1,4 +1,5 @@
-﻿using Makeathon.Common.ViewModels;
+﻿using Makeathon.Common.Commands;
+using Makeathon.Common.ViewModels;
 using Makeathon.Messaging.Models;
 using Makeathon.Messaging.Toast;
 using Newtonsoft.Json;
@@ -143,12 +144,33 @@ namespace Makeathon
             }
         }
 
+        private ICommand checkoutCommand;
+
+        public ICommand CheckoutCommand
+        {
+            get { return checkoutCommand; }
+            set { checkoutCommand = value; }
+        }
+
+
         private ObservableCollection<SmartCartItem> smartCartItems;
 
         public ObservableCollection<SmartCartItem> SmartCartItems
         {
             get { return smartCartItems; }
-            set { smartCartItems = value; RaisePropertyChanged("SmartCartItems"); }
+            set
+            {
+                smartCartItems = value;
+                RaisePropertyChanged("SmartCartItems");
+            }
+        }
+
+        private double total;
+
+        public double Total
+        {
+            get { return total; }
+            set { total = value; RaisePropertyChanged("Total"); }
         }
 
 
@@ -167,8 +189,27 @@ namespace Makeathon
             SmartCartItems = new ObservableCollection<SmartCartItem>();
 
             uiContext = SynchronizationContext.Current;
+
+            CheckoutCommand = new ButtonCommand(new Action(() => { this.Checkout(); }), new Func<bool>(() => { return true; }));
         }
 
+        private void Checkout()
+        {
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://localhost:3000/checkout");
+            httpWebRequest.Method = WebRequestMethods.Http.Get;
+            httpWebRequest.Accept = "application/json";
+            var response = (HttpWebResponse)httpWebRequest.GetResponse();
+
+            using (var sr = new StreamReader(response.GetResponseStream()))
+            {
+                if(string.Equals(sr.ReadToEnd(), "CheckedOut"))
+                {
+                    SmartCartItems.Clear();                    
+                    Toast("Successfully paid " + Total.ToString() + "\nWe love your $$", ToastMessageType.Success);
+                    Total = 0;
+                }
+            }
+        }
         public async Task StartGetItemsLoop()
         {
             await Task.Run(()=> {
@@ -192,11 +233,12 @@ namespace Makeathon
                 {
                     List<SmartCartItem> items = JsonConvert.DeserializeObject<List<SmartCartItem>>(sr.ReadToEnd());
 
-                    items = items.Except(SmartCartItems.ToList()).ToList();
                     foreach (var item in items)
                     {
-                        MainUserControlViewModel.AddSmartCartItem(item);
+                        if(!SmartCartItems.Contains(item))
+                            MainUserControlViewModel.AddSmartCartItem(item);
                     }
+                    Total = smartCartItems.Select(x => (x.Price * x.Count)).Sum();
                 }
             }
             catch (Exception ex)
