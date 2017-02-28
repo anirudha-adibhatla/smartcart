@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Makeathon.Messaging.LiveLogs.LiveLogsUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Makeathon.Messaging.LiveLogs"
+             xmlns:attachedProps="clr-namespace:Makeathon.Common.AttachedProperties"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="1440" 
+             Background="{DynamicResource MainBackgroundBrush}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:LiveLogMessageTypeToBrushConverter x:Key="LiveLogMessageTypeToBrushConverter"/>
+            <local:LiveLogMessageTypeToFontWeightConverter x:Key="LiveLogMessageTypeToFontWeightConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <ScrollViewer x:Name="scrollViewer" Margin="0" attachedProps:AttachedPropertyForScrollViewerToScrollToBottom.AutoScroll="{Binding ShouldScrollToBottom}">
+            <ListBox ItemsSource="{Binding Logs}" Background="{x:Null}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding LogTime}" Foreground="{Binding LogMessageType, Converter={StaticResource LiveLogMessageTypeToBrushConverter}, FallbackValue={StaticResource InfoForegroundBrush}}"
+                                           Margin="0,0,15,0" FontSize="12" FontFamily="Lucida Console"/>
+
+                            <TextBlock Grid.Column="1" Text="{Binding Feature}" Foreground="{Binding LogMessageType, Converter={StaticResource LiveLogMessageTypeToBrushConverter}, FallbackValue={StaticResource InfoForegroundBrush}}"
+                                           Margin="0,0,15,0" FontSize="12" FontFamily="Lucida Console"/>
+
+                            <TextBlock Grid.Column="2" Text="{Binding Message}" Foreground="{Binding LogMessageType, Converter={StaticResource LiveLogMessageTypeToBrushConverter}, FallbackValue={StaticResource InfoForegroundBrush}}"
+                                           Margin="0,0,15,0" FontSize="12" FontFamily="Lucida Console"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

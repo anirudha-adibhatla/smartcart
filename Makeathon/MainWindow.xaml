@@ -1,0 +1,22 @@
+﻿<Controls:MetroWindow 
+        xmlns:LiveLog="clr-namespace:Makeathon.Messaging.LiveLog" 
+        x:Class="Makeathon.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"       
+        xmlns:local="clr-namespace:Makeathon"        
+        mc:Ignorable="d"
+        Title="EPDRD" 
+        Height="900" Width="1440"
+        GlowBrush="Black" Foreground="{DynamicResource InfoForegroundBrush}" 
+        WindowTitleBrush="{DynamicResource MainBackgroundBrush}" 
+        TitleForeground="{DynamicResource InfoForegroundBrush}" 
+        OverrideDefaultWindowCommandsBrush="{DynamicResource InfoForegroundBrush}">
+    <Grid>
+        <Border BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" BorderThickness="0,1,0,0">
+            <local:MainUserControl />
+        </Border>
+    </Grid>
+</Controls:MetroWindow>
